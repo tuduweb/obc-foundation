@@ -18,18 +18,19 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick WebSockets Network NetLinguistTools REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick WebSockets Network LinguistTools REQUIRED)
+option(BUILD_TESTING ON)
 
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick WebSockets Network REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick WebSockets Network REQUIRED)
+
+
+include(OBCFoundation.cmake)
 
 set(PROJECT_SOURCES
         src/main.cpp
 
-        src/utils/OBCHelpers.cpp
-        src/utils/OBCHelpers.hpp
-        src/utils/PureJson.hpp
+        ${OBCFOUNDATION_SOURCES}
 )
-
 
 add_executable(${PROJECT_NAME}
     ${PROJECT_SOURCES}
@@ -38,3 +39,9 @@ add_executable(${PROJECT_NAME}
 ### add extra qt library
 target_link_libraries(${PROJECT_NAME}
     PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::WebSockets Qt${QT_VERSION_MAJOR}::Network)
+
+
+# if(BUILD_TESTING)
+#     include(CTest)
+#     add_subdirectory(test)
+# endif()
